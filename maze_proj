@@ -1,0 +1,79 @@
+class game:
+  def level_one_maze():
+    maze = []
+    maze.append(["#","#","#","#","#","#","S"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#"," "," "," "," "," ","#"])
+    maze.append(["F","#","#","#","#","#","#"])
+    #S is starting postition
+    #F is finish position
+    # #'s are blockers and spaces are open to move through
+    maze2 = []
+    maze2.append(["#","#","#","#","#","#","S"])
+    maze2.append(["#","#","#","#"," ","#","#"])
+    maze2.append(["#","#","#","#"," ","#","#"])
+    maze2.append(["#"," "," "," "," "," ","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze.append(["#","#","#","#"," ","#","#"])
+    maze2.append(["#","#","#","#","F","#","#"])
+    for row in maze:
+          print("".join(row)) 
+  level_one_maze();
+  def detect_blank_spaces_and_walls(maze):
+    blank_spaces = []
+    walls = []
+    for y, row in enumerate(maze):
+        for x, cell in enumerate(row):
+            if cell == " ":
+                blank_spaces.append((x, y))
+            elif cell == "#":
+                walls.append((x, y))
+    return blank_spaces, walls
+
+    def solve_maze(maze):
+      open_set = []
+      closed_set = set()
+      heapq.heappush(open_set, (0, start, []))
+      while open_set:
+          current_cost, current_node, path = heapq.heappop(open_set)
+          if current_node == end:
+              return path + [current_node]
+          if current_node in closed_set:
+              continue
+          closed_set.add(current_node)
+          for move in movements:
+              new_node = (current_node[0] + move[0], current_node[1] + move[1])
+              if 0 <= new_node[0] < len(maze[0]) and 0 <= new_node[1] < len(maze):
+                  if maze[new_node[1]][new_node[0]] != "#" and new_node not in closed_set:
+                      new_cost = current_cost + 1
+                      heapq.heappush(open_set, (new_cost + heuristic(new_node, end), new_node, path + [current_node]))
+
+      return None
+
+  # Find the path from start to finish
+  start = None
+  end = None
+  for y, row in enumerate(maze):
+      for x, cell in enumerate(row):
+          if cell == "S":
+              start = (x, y)
+          elif cell == "F":
+              end = (x, y)
+
+  if start is not None and end is not None:
+      path = a_star(maze, start, end)
+      if path is not None:
+          print("Path from start to finish:")
+          for node in path:
+              print(node)
+      else:
+          print("No path found.")
+  else:
+      print("Start or end not found in the maze.")
+
+
+    
